@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualize Temperature Data</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+     
+    <div>
+        <h2 style="text-align: center; font-size: 28px; margin-bottom: 10px;">Average Temperature Change in the U.S.</h2>
+        <canvas id="myChart"></canvas>
+    </div>
+     
+</body>
+<script>
+    async function getData() {
+        const response = await fetch("muauza_sample.csv");
+        const data = await response.text();
+        const rows = data.split("\n").slice(1);
+
+
+
+
+        const years = [];
+        const temps = [];
+
+
+
+
+        rows.forEach((elem) => {
+            const row = elem.split(",");
+            const year = row[0];
+            const temp = parseFloat(row[1]);
+            years.push(year);
+            temps.push(temp);
+        });
+
+
+
+
+        return { years, temps };
+    }
+
+
+
+
+    async function createChart() {
+        const { years, temps } = await getData();
+        const ctx = document.getElementById('myChart');
+
+
+
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: years,
+               
+                datasets: [{
+                    label: 'Change in Temperature ()',
+                    data: temps,
+                    borderWidth: 1
+                   
+                   
+       
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    }
+
+
+
+
+    createChart();
+</script>
+</html>
